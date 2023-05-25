@@ -1,3 +1,13 @@
+/*
+    Author: Gavin Harrold
+    File: Game.js
+    Description: A React implementation of Conway's Game of Life
+    ----------------------------------------------------------------------------------    
+    TODO:
+    * colors? bigger screen?
+    * more features
+*/
+
 import React from 'react';
 import './Game.css';
 
@@ -5,11 +15,9 @@ const CELL_SIZE = 20;
 const WIDTH = 800;
 const HEIGHT = 600;
 
-/* TODO:
-    * comments/docstrings
-    * colors? bigger screen?
-    * more features
-*/
+/**
+ * Game class, main class
+ */
 class Game extends React.Component {
     constructor() {
         super();
@@ -20,11 +28,13 @@ class Game extends React.Component {
 
     state = { cells: [], interval: 100, isRunning: false, }
 
+    //starts game
     runGame = () => {
         this.setState({isRunning: true});
         this.runIteration();
     }
 
+    //stops game
     stopGame = () => {
         this.setState({isRunning: false});
         if(this.timeoutHandler) {
@@ -33,6 +43,9 @@ class Game extends React.Component {
         }
     }
 
+    /**
+     * Runs an interation of the Game of Life, applying rules
+     */
     runIteration() {
         let newBoard = this.makeEmptyBoard();
         
@@ -61,6 +74,13 @@ class Game extends React.Component {
         }, this.state.interval);
     }
 
+    /**
+     * Calculates neighbors of a given cell 
+     * @param {Array} board 
+     * @param {int} x 
+     * @param {int} y 
+     * @returns number of neighbors
+     */
     calculateNeighbors(board, x, y) {
         let neighbors = 0;
         const dirs = [[-1, -1], [-1, 0], [-1, 1], [0, 1], [1, 1], [1, 0], [1, -1], [0, -1]];
@@ -80,7 +100,10 @@ class Game extends React.Component {
         this.setState({interval: event.target.value});
     }
 
-    //make empty board
+    /**
+     * creates an empty board
+     * @returns empty board
+     */
     makeEmptyBoard() {
         let board = [];
         for(let y = 0; y < this.rows; y++) {
@@ -92,7 +115,10 @@ class Game extends React.Component {
         return board;
     }
 
-    //make cells
+    /**
+     * Adds cells to board
+     * @returns cells 
+     */
     makeCells() {
         let cells = [];
         for(let y = 0; y < this.rows; y++) {
@@ -105,6 +131,10 @@ class Game extends React.Component {
         return cells;
     }
 
+    /**
+     * Calculates position of board element
+     * @returns position of board element
+     */
     getElementOffset() {
         const rect = this.boardRef.getBoundingClientRect();
         const doc = document.documentElement;
@@ -112,6 +142,10 @@ class Game extends React.Component {
         return { x: (rect.left + window.pageXOffset) - doc.clientLeft, y: (rect.top+window.pageYOffset) - doc.clientTop, }; 
     }
 
+    /**
+     * Retrieves click position, converts to relative position and calculates cols and rows of cell being clicked
+     * @param {*} event 
+     */
     handleClick = (event) => {
         const elemOffset = this.getElementOffset();
         const offsetX = event.clientX - elemOffset.x;
@@ -147,6 +181,9 @@ class Game extends React.Component {
     }
 }
 
+/**
+ * Cell class
+ */
 class Cell extends React.Component {
     render() {
         const { x, y } = this.props;
