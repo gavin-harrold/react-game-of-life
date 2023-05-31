@@ -1,4 +1,6 @@
-# Getting Started with Create React App
+# Game Of Life - React 
+An implementation of Conway's Game of Life using React with the goal of learning the framework.
+
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
